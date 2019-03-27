@@ -3,6 +3,8 @@ VGG
 """
 from torch import nn
 
+from ..utils.nn import init_weights_
+
 
 class VGG_A(nn.Module):
     """VGG_A model
@@ -11,7 +13,7 @@ class VGG_A(nn.Module):
     224x224x3
     """
 
-    def __init__(self, inp_ch=3, num_classes=10):
+    def __init__(self, inp_ch=3, num_classes=10, init_weights=True):
         super().__init__()
 
         self.stage1 = nn.Sequential(
@@ -52,6 +54,9 @@ class VGG_A(nn.Module):
             nn.ReLU(),
             nn.Linear(512, num_classes))
 
+        if init_weights:
+            self._init_weights()
+
     def forward(self, x):
         x = self.stage1(x)
         x = self.stage2(x)
@@ -61,6 +66,10 @@ class VGG_A(nn.Module):
         x = self.classifier(x.view(-1, 512 * 1 * 1))
         return x
 
+    def _init_weights(self):
+        for m in self.modules():
+            init_weights_(m)
+
 
 class VGG_A_BatchNorm(nn.Module):
     """VGG_A model with BatchNorm after each layer
@@ -69,7 +78,7 @@ class VGG_A_BatchNorm(nn.Module):
     224x224x3
     """
 
-    def __init__(self, inp_ch=3, num_classes=10):
+    def __init__(self, inp_ch=3, num_classes=10, init_weights=True):
         super().__init__()
 
         self.stage1 = nn.Sequential(
@@ -120,6 +129,9 @@ class VGG_A_BatchNorm(nn.Module):
             nn.ReLU(True),
             nn.Linear(512, num_classes))
 
+        if init_weights:
+            self._init_weights()
+
     def forward(self, x):
         x = self.stage1(x)
         x = self.stage2(x)
@@ -128,3 +140,7 @@ class VGG_A_BatchNorm(nn.Module):
         x = self.stage5(x)
         x = self.classifier(x.view(-1, 512 * 1 * 1))
         return x
+
+    def _init_weights(self):
+        for m in self.modules():
+            init_weights_(m)
