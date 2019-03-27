@@ -6,7 +6,7 @@ from torch import nn
 from ..utils.nn import init_weights_
 
 
-class VGG_A(nn.Module):
+class VGGA(nn.Module):
     """VGG_A model
 
     size of Linear layers is smaller since input assumed to be 32x32x3, instead of
@@ -71,7 +71,7 @@ class VGG_A(nn.Module):
             init_weights_(m)
 
 
-class VGG_A_BatchNorm(nn.Module):
+class VGGABatchNorm(nn.Module):
     """VGG_A model with BatchNorm after each layer
 
     size of Linear layers ismaller since input assumed to be 32x32x3, instead of
