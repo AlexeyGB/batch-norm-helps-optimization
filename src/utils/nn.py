@@ -15,7 +15,7 @@ def init_weights_(m):
     if isinstance(m, nn.Conv2d):
         nn.init.xavier_normal_(m.weight)
         if m.bias is not None:
-            nn.init.xavier_normal_(m.bias)
+            nn.init.zeros_(m.bias)
 
     elif isinstance(m, nn.BatchNorm2d):
         nn.init.ones_(m.weight)
@@ -28,4 +28,4 @@ def init_weights_(m):
     elif isinstance(m, nn.Linear):
         nn.init.xavier_normal_(m.weight)
         if m.bias is not None:
-            nn.init.xavier_normal_(m.bias)
+            nn.init.zeros_(m.bias)
