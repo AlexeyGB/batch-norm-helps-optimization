@@ -16,35 +16,36 @@ class VGGA(nn.Module):
     def __init__(self, inp_ch=3, num_classes=10, init_weights=True):
         super().__init__()
 
-        self.stage1 = nn.Sequential(
+        self.features = nn.Sequential(
+            # stage 1
             nn.Conv2d(in_channels=inp_ch, out_channels=64, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.ReLU(True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage2 = nn.Sequential(
+            # stage 2
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.ReLU(True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage3 = nn.Sequential(
+            # stage 3
             nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.ReLU(True),
             nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.ReLU(True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage4 = nn.Sequential(
+            # stage 4
             nn.Conv2d(in_channels=256, out_channels=512, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.ReLU(True),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.ReLU(True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage5 = nn.Sequential(
+            # stage5
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.ReLU(True),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.ReLU(True),
             nn.MaxPool2d(kernel_size=2, stride=2))
 
         self.classifier = nn.Sequential(
@@ -58,11 +59,7 @@ class VGGA(nn.Module):
             self._init_weights()
 
     def forward(self, x):
-        x = self.stage1(x)
-        x = self.stage2(x)
-        x = self.stage3(x)
-        x = self.stage4(x)
-        x = self.stage5(x)
+        x = self.features(x)
         x = self.classifier(x.view(-1, 512 * 1 * 1))
         return x
 
@@ -81,37 +78,38 @@ class VGGABatchNorm(nn.Module):
     def __init__(self, inp_ch=3, num_classes=10, init_weights=True):
         super().__init__()
 
-        self.stage1 = nn.Sequential(
+        self.features = nn.Sequential(
+            # stage 1
             nn.Conv2d(in_channels=inp_ch, out_channels=64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(True),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage2 = nn.Sequential(
+            # stage 2
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(True),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage3 = nn.Sequential(
+            #stage 3
             nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(True),
             nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(True),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage4 = nn.Sequential(
+            # stage 4
             nn.Conv2d(in_channels=256, out_channels=512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(True),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(True),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-        self.stage5 = nn.Sequential(
+            # stage5
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(True),
@@ -133,11 +131,7 @@ class VGGABatchNorm(nn.Module):
             self._init_weights()
 
     def forward(self, x):
-        x = self.stage1(x)
-        x = self.stage2(x)
-        x = self.stage3(x)
-        x = self.stage4(x)
-        x = self.stage5(x)
+        x = self.features(x)
         x = self.classifier(x.view(-1, 512 * 1 * 1))
         return x
 
